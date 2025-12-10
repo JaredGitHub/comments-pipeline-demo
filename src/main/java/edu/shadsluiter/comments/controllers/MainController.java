@@ -1,5 +1,6 @@
 package edu.shadsluiter.comments.controllers;
 
+import edu.shadsluiter.comments.model.AppComment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,26 +9,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.shadsluiter.comments.data.CommentsDAO;
 
+import java.util.List;
+
 @Controller
-public class MainController {
+public class MainController
+{
 
-    // Simple in-memory DAO instance for now
-    private final CommentsDAO commentsDAO = new CommentsDAO();
+	// Simple in-memory DAO instance for now
+	private final CommentsDAO commentsDAO = new CommentsDAO();
 
-    // Show the page with the list of comments
-    @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("comments", commentsDAO.getComments());
-        return "index";  // resolves to src/main/resources/templates/index.html
-    }
+	// Show the page with the list of comments
+	@GetMapping("/")
+	public String index(Model model)
+	{
+		model.addAttribute("comments", commentsDAO.getComments());
+		return "index";  // resolves to src/main/resources/templates/index.html
+	}
 
-    // Handle the form submission
-    @PostMapping("/submitComment")
-    public String submitComment(String author, String content) {
-        commentsDAO.addComment(author, content);
+	// Handle the form submission
+	@PostMapping("/submitComment")
+	public String submitComment(String author, String content)
+	{
+		commentsDAO.addComment(author, content);
 
-        // PRG pattern: redirect so refresh doesn’t resubmit the form
-        return "redirect:/";
-    }
- 
+		// PRG pattern: redirect so refresh doesn’t resubmit the form
+		return "redirect:/";
+	}
+
+	@GetMapping("/search")
+	public String searchComment(@RequestParam("searchTerm") String searchTerm, Model model)
+	{
+
+		List<AppComment> results = commentsDAO.searchForComments(searchTerm);
+
+		model.addAttribute("comments", results);
+		model.addAttribute("searchTerm", searchTerm);
+
+		return "index"; // Return the main view with results included
+	}
+
 }
