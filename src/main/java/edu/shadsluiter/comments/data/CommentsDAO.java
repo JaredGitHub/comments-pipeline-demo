@@ -1,5 +1,6 @@
 package edu.shadsluiter.comments.data;
  
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,9 @@ public class CommentsDAO {
             return; 
         }
 
-        AppComment comment1 = new AppComment(1, "Alice", "This is a great day to talk about life."   );
-        AppComment comment2 = new AppComment(2, "Bob", "I agree with Alice!" );
-        AppComment comment3 = new AppComment(3, "Charlie", "I feel like coding today." );
+        AppComment comment1 = new AppComment(1, "Alice", "This is a great day to talk about life.", LocalDateTime.now());
+        AppComment comment2 = new AppComment(2, "Bob", "I agree with Alice!",LocalDateTime.now());
+        AppComment comment3 = new AppComment(3, "Charlie", "I feel like coding today.",LocalDateTime.now());
         comments.add(comment1);
         comments.add(comment2);
         comments.add(comment3);
@@ -36,7 +37,7 @@ public class CommentsDAO {
     }
 
     public void addComment(String author, String content) {
-        AppComment newComment = new AppComment(nextId++, author, content );
+        AppComment newComment = new AppComment(nextId++, author, content,LocalDateTime.now());
         comments.add(newComment);
     }
 
